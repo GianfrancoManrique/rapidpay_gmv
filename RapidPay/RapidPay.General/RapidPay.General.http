@@ -1,0 +1,6 @@
+@RapidPay.General_HostAddress = http://localhost:5220
+
+GET {{RapidPay.General_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
