@@ -21,11 +21,29 @@ namespace RapidPay.General.Controllers
             _cardManagmentService = cardManagmentService;
         }
 
-        [HttpPost]
-        public IActionResult CreateCard([FromBody] CreateCreditCardRequest request, CancellationToken token)
+        [HttpPost("CreditCard")]
+        public IActionResult CreateCreditCard([FromBody] CreateCreditCardRequest request, CancellationToken token)
         {
             var response = _cardManagmentService.CreateCreditCard(request);
-            return CreatedAtAction(nameof(CreateCard), new { id = response.Id });
+            return CreatedAtAction(nameof(CreateCreditCard), new { id = response.Id });
+        }
+
+        [HttpGet("CreditCard/{number}")]
+        public async Task<CreditCard?> GetCreditCardBalance(string number, CancellationToken token)
+        {
+            var response = await _cardManagmentService.GetCreditCardDetails(number);
+            return response;
+        }
+
+        [HttpPost("Payment")]
+        public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentRequest request, CancellationToken token)
+        {
+            var response = await _cardManagmentService.CreatePayment(request);
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+            return CreatedAtAction(nameof(CreatePayment), response);
         }
 
         [HttpGet]

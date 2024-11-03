@@ -24,5 +24,47 @@ namespace RapidPay.General.Services
             response.Id = creditCardId;
             return response;
         }
+
+        public async Task<CreditCard?> GetCreditCardDetails(string number)
+        {
+            CreditCard? creditCard = await _creditCardRepository.GetDetails(number);
+            return creditCard;
+        }
+
+        public async Task<CreatePaymentResponse> CreatePayment(CreatePaymentRequest request)
+        {
+            var response = new CreatePaymentResponse();
+            if (request.Number == null)
+            {
+                response.Success = false;
+                response.Message = "Invalid credit card number";
+                return response;
+            }
+
+            var existingCreditCard = await _creditCardRepository.GetDetails(request.Number);
+            if (existingCreditCard == null)
+            {
+                response.Success = false;
+                response.Message = "Inexisting credit card number";
+                return response;
+            }
+
+            var fee = UFEService.Instance.GetFee();
+            decimal newBalance = existingCreditCard.Balance - request.Amount - request.Amount*fee;
+
+            var updatedCreditCard = _creditCardRepository.UpdateBalance(existingCreditCard, newBalance);
+
+            if (updatedCreditCard == null)
+            {
+                response.Success = false;
+                response.Message = "Not able to update balance";
+                return response;
+            }
+            response.Success = true;
+            response.CurrentBalance = updatedCreditCard.Balance;
+            response.Fee = fee;
+            response.Message = "Successfull payment creation";
+            return response;
+        }
     }
 }
