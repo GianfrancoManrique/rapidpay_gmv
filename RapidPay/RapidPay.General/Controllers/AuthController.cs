@@ -19,7 +19,6 @@ namespace RapidPay.General.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest request)
         {
-            // Simulate a user validation. Replace this with your own user validation logic.
             var existingUser = MockAuthData.Users.FirstOrDefault(u => u.Email == request.Email && u.Password == request.Password);
             if (existingUser != null && !string.IsNullOrEmpty(existingUser.UserId))
             {
