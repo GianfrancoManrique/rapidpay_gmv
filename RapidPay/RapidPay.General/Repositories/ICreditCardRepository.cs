@@ -4,8 +4,8 @@ namespace RapidPay.General.Repositories
 {
     public interface ICreditCardRepository
     {
-        int Create(CreditCard creditCard);
+        Task<CreditCard?> Create(CreditCard creditCard);
         Task<CreditCard?> GetDetails(string number);
-        CreditCard? UpdateBalance(CreditCard creditCard, decimal newBalance);
+        Task<CreditCard?> UpdateBalance(CreditCard creditCard, decimal newBalance);
     }
 }

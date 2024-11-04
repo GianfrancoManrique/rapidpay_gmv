@@ -1,5 +1,4 @@
 ﻿using RapidPay.General.Models;
-using System.Security.Cryptography.Xml;
 
 namespace RapidPay.General.MockData
 {
@@ -7,7 +6,7 @@ namespace RapidPay.General.MockData
     {
         public static List<CreditCard> CreditCards = new List<CreditCard>()
         {
-            new CreditCard() { Balance = 1000, Number = "1111 1111 1111 111"}
+            new CreditCard() { Number = "348899684619369", Balance = 100}
         };
     }
 }

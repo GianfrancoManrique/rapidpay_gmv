@@ -1,9 +1,10 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using RapidPay.General.Services.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace RapidPay.General.Services
+namespace RapidPay.General.Services.Implementations
 {
     public class JwtTokenService : IJwtTokenService
     {

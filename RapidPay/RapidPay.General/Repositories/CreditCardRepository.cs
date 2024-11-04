@@ -5,20 +5,22 @@ namespace RapidPay.General.Repositories
 {
     public class CreditCardRepository : ICreditCardRepository
     {
-        public int Create(CreditCard creditCard)
+        public async Task<CreditCard?> Create(CreditCard creditCard)
         {
+            await Task.Delay(1000); // added to simulate multithreading
             MockCardManagmentData.CreditCards.Add(creditCard);
-            return MockCardManagmentData.CreditCards.Count;
+            return creditCard;
         }
 
         public async Task<CreditCard?> GetDetails(string number)
         {
-            await Task.Delay(1000);
+            await Task.Delay(1000); // added to simulate multithreading
             return MockCardManagmentData.CreditCards.FirstOrDefault(card => card.Number == number);
         }
 
-        public CreditCard? UpdateBalance(CreditCard creditCard, decimal newBalance)
+        public async Task<CreditCard?> UpdateBalance(CreditCard creditCard, decimal newBalance)
         {
+            await Task.Delay(1000); // added to simulate multithreading
             var existingCreditCard = MockCardManagmentData.CreditCards.FirstOrDefault(card => card.Number == creditCard?.Number);
             if (existingCreditCard == null)
             {

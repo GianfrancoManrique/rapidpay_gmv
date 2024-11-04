@@ -1,4 +1,4 @@
-﻿namespace RapidPay.General.Services
+﻿namespace RapidPay.General.Services.Interfaces
 {
     public interface IJwtTokenService
     {

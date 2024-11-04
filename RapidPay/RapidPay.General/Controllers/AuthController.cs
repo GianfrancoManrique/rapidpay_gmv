@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using RapidPay.General.MockData;
-using RapidPay.General.Services;
+using RapidPay.General.Services.Interfaces;
 
 namespace RapidPay.General.Controllers
 {

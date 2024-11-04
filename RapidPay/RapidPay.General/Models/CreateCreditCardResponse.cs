@@ -2,6 +2,14 @@
 {
     public class CreateCreditCardResponse
     {
-        public long Id { get; set; }
+        public string? Number { get; set; }
+        public string? Message { get; set; }
+        public bool Success { get; set; }
+
+        public CreateCreditCardResponse(bool Success, string? Message)
+        {
+            this.Success = Success;
+            this.Message = Message;
+        }
     }
 }

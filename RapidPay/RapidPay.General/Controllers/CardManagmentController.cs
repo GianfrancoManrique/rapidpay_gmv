@@ -1,20 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RapidPay.General.Models;
-using RapidPay.General.Services;
+using RapidPay.General.Services.Interfaces;
 
 namespace RapidPay.General.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class CardManagmentController : ControllerBase
     {
         private ICardManagmentService _cardManagmentService;
-
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
 
         public CardManagmentController(ICardManagmentService cardManagmentService)
         {
@@ -22,10 +18,14 @@ namespace RapidPay.General.Controllers
         }
 
         [HttpPost("CreditCard")]
-        public IActionResult CreateCreditCard([FromBody] CreateCreditCardRequest request, CancellationToken token)
+        public async Task<IActionResult> CreateCreditCard([FromBody] CreateCreditCardRequest request, CancellationToken token)
         {
-            var response = _cardManagmentService.CreateCreditCard(request);
-            return CreatedAtAction(nameof(CreateCreditCard), new { id = response.Id });
+            var response = await _cardManagmentService.CreateCreditCard(request);
+            if (response.Success)
+            {
+                return CreatedAtAction(nameof(CreateCreditCard), new { id = response.Number });
+            }
+            return BadRequest(response);
         }
 
         [HttpGet("CreditCard/{number}")]
@@ -39,23 +39,11 @@ namespace RapidPay.General.Controllers
         public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentRequest request, CancellationToken token)
         {
             var response = await _cardManagmentService.CreatePayment(request);
-            if (!response.Success)
+            if (response.Success)
             {
-                return BadRequest(response);
+                return CreatedAtAction(nameof(CreatePayment), response);
             }
-            return CreatedAtAction(nameof(CreatePayment), response);
-        }
-
-        [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
-        {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            return BadRequest(response);
         }
     }
 }

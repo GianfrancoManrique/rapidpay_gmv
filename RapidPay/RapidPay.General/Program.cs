@@ -1,24 +1,21 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using RapidPay.General.Repositories;
-using RapidPay.General.Services;
+using RapidPay.General.Services.Implementations;
+using RapidPay.General.Services.Interfaces;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// add services
-builder.Services.AddScoped<ICardManagmentService, CardManagmentService>();
+builder.Services.AddSingleton<IUFEService, UFEService>();
+
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
-// add repositories
+
+builder.Services.AddScoped<ICardManagmentService, CardManagmentService>();
 builder.Services.AddScoped<ICreditCardRepository, CreditCardRepository>();
-/*
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-*/
-
-// JWT
-var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
 
 builder.Services.AddAuthentication(options =>
 {
@@ -27,6 +24,9 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
+    var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+    var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
+
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
@@ -40,30 +40,28 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAuthorization();
-
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
-/*
 if (app.Environment.IsDevelopment())
-    {
-    // Enable Swagger in development mode
+{
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-        c.RoutePrefix = string.Empty; // Set Swagger UI at the app's root
-    });
+    app.UseSwaggerUI();
 }
-*/
 
-// Configure the HTTP request pipeline.
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/")
+    {
+        context.Response.Redirect("/swagger");
+        return;
+    }
+    await next();
+});
 
-//app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
