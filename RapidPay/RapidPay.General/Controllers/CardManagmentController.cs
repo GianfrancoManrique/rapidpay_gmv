@@ -29,10 +29,14 @@ namespace RapidPay.General.Controllers
         }
 
         [HttpGet("CreditCard/{number}")]
-        public async Task<CreditCard?> GetCreditCardBalance(string number, CancellationToken token)
+        public async Task<IActionResult> GetCreditCardBalance(string number, CancellationToken token)
         {
             var response = await _cardManagmentService.GetCreditCardDetails(number);
-            return response;
+            if (response.Success)
+            {
+                return CreatedAtAction(nameof(CreateCreditCard), response);
+            }
+            return BadRequest(response);
         }
 
         [HttpPost("Payment")]

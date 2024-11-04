@@ -29,11 +29,12 @@ namespace RapidPay.General.Services.Implementations
             var creditCardCreated = await _creditCardRepository.Create(creditCard);
             if (creditCardCreated == null)
             {
-                response = new CreateCreditCardResponse(false, "Error while credit card creation");
+                response = new CreateCreditCardResponse(false, "Error on credit card creation");
                 return response;
             }
 
             response.Number = creditCardCreated?.Number;
+            response.Balance = creditCardCreated?.Balance;
             return response;
         }
 
@@ -54,17 +55,34 @@ namespace RapidPay.General.Services.Implementations
             return prefix;
         }
 
-        public async Task<CreditCard?> GetCreditCardDetails(string number)
+        public async Task<GetCreditCardResponse> GetCreditCardDetails(string number)
         {
-            CreditCard? creditCard = await _creditCardRepository.GetDetails(number);
-            return creditCard;
+            var response = new GetCreditCardResponse(true, "Success getting credit card details");
+
+            if (string.IsNullOrEmpty(number))
+            {
+                response = new GetCreditCardResponse(false, "Invalid credit card number");
+                response.CreditCard.Number = string.Empty;
+                return response;
+            }
+
+            var creditCard = await _creditCardRepository.GetDetails(number);
+            if (creditCard == null)
+            {
+                response = new GetCreditCardResponse(false, "Inexisting credit card");
+                response.CreditCard.Number = number;
+                return response;
+            }
+
+            response.CreditCard = creditCard;
+            return response;
         }
 
         public async Task<CreatePaymentResponse> CreatePayment(CreatePaymentRequest request)
         {
             var response = new CreatePaymentResponse(request.Number, true, "Successfull payment creation");
 
-            if (request.Number == null)
+            if (string.IsNullOrEmpty(request.Number))
             {
                 response = new CreatePaymentResponse(string.Empty, false, "Invalid credit card number");
                 return response;
