@@ -1,0 +1,148 @@
+{
+	"info": {
+		"_postman_id": "553f8dd8-b1f5-4204-aac2-84a0f8f34b19",
+		"name": "CardManagment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39437721"
+	},
+	"item": [
+		{
+			"name": "01 GetToken",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"gmanrique.422@gmail.com\",\r\n    \"password\": \"qazw3579\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44360/auth/login",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44360",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "02 CreateCreditCard",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnbWFucmlxdWUiLCJqdGkiOiI1MTJhYTFiNS1mOTJlLTQxMjUtODc4Mi0yZmFhOTBhODg4OTkiLCJleHAiOjE3MzA2OTIyOTgsImlzcyI6Ik15QXV0aFNlcnZlciIsImF1ZCI6Ik15QXV0aENsaWVudCJ9.LJp6RrnI9jxW6gRRwJ2Us-UNtuL6wvCgtw9C2k8t3Vo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"balance\": 12\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44360/cardManagment/creditCard",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44360",
+					"path": [
+						"cardManagment",
+						"creditCard"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "03 GetCreditCardBalance",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnbWFucmlxdWUiLCJqdGkiOiI1MTJhYTFiNS1mOTJlLTQxMjUtODc4Mi0yZmFhOTBhODg4OTkiLCJleHAiOjE3MzA2OTIyOTgsImlzcyI6Ik15QXV0aFNlcnZlciIsImF1ZCI6Ik15QXV0aENsaWVudCJ9.LJp6RrnI9jxW6gRRwJ2Us-UNtuL6wvCgtw9C2k8t3Vo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44360/cardManagment/creditCard/375023630070353",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44360",
+					"path": [
+						"cardManagment",
+						"creditCard",
+						"375023630070353"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "04 CreatePayment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJnbWFucmlxdWUiLCJqdGkiOiI1MTJhYTFiNS1mOTJlLTQxMjUtODc4Mi0yZmFhOTBhODg4OTkiLCJleHAiOjE3MzA2OTIyOTgsImlzcyI6Ik15QXV0aFNlcnZlciIsImF1ZCI6Ik15QXV0aENsaWVudCJ9.LJp6RrnI9jxW6gRRwJ2Us-UNtuL6wvCgtw9C2k8t3Vo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"number\": \"375023630070353\",\r\n    \"amount\": 10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44360/cardManagment/payment",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44360",
+					"path": [
+						"cardManagment",
+						"payment"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
